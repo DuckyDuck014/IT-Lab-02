@@ -32,18 +32,35 @@ namespace ЛР_2
             {
                 if (checkedListBox1.GetItemChecked(i))
                     CreateSerie(i);
+                button3.Enabled = false;
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Coords = new double[15, 2];
+            int point = 0;
             string filename;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog() { Filter = "Текстовые файлы(*.txt)|*.txt" };
+            string line;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog()
+            {
+                Filter = "Текстовые файлы(*.txt)|*.txt"
+            };
             if (openFileDialog1.ShowDialog() != DialogResult.OK)
                 return;
             filename = openFileDialog1.FileName;
-            ReadFile(filename);
+            var sr = new StreamReader(filename);
+            while (((line = sr.ReadLine()) != null))
+            {
+                Coords[point, 0] = Convert.ToDouble(line);
+
+
+                point++;
+            }
+            button3.Enabled = true;
         }
+        // Подключение Х и Y из двух файлов
+        /*
         private double[,] Coords;
  
         public void ReadFile(string file)
@@ -70,6 +87,66 @@ namespace ЛР_2
                 point++;
             }
         }
+        */
+        // Создание графика с дополнительными условиями
+        /*
+        public void CreateSerie()
+        {
+            double x, y;
+            if (ser1IsEx)
+            {
+                string NameSerie = "Серия1";
+                chart1.Series.Add(new Series(NameSerie));
+                chart1.Series[NameSerie].ChartType = (System.Windows.Forms.DataVisualization.Charting.SeriesChartType)4;
+                chart1.Series[NameSerie].BorderWidth = 2;
+
+                for (int i = 0; i < Coords.Length / 2; i++)
+                {
+                    if (Coords[i, 0] < 0)
+                    {
+                        x = Coords[i, 0];
+                        y = Coords[i, 1];
+                        chart1.Series[0].Points.AddXY(x, y);
+                    }
+                }
+            }
+            if (ser2IsEx)
+            {
+                string NameSerie = "Серия2";
+                chart1.Series.Add(new Series(NameSerie));
+                chart1.Series[NameSerie].ChartType = (System.Windows.Forms.DataVisualization.Charting.SeriesChartType)4;
+                chart1.Series[NameSerie].BorderWidth = 2;
+
+                for (int i = 0; i < Coords.Length / 2; i++)
+                {
+                    if (Coords[i, 1] < 0)
+                    {
+                        x = Coords[i, 0];
+                        y = Coords[i, 1];
+                        chart1.Series[1].Points.AddXY(x, y);
+                    }
+                }
+            }
+            if (ser3IsEx)
+            {
+                string NameSerie = "Серия3";
+                chart1.Series.Add(new Series(NameSerie));
+                chart1.Series[NameSerie].ChartType = (System.Windows.Forms.DataVisualization.Charting.SeriesChartType)4;
+                chart1.Series[NameSerie].BorderWidth = 2;
+
+                for (int i = 0; i < Coords.Length / 2; i++)
+                {
+                    if (Coords[i, 0] < 0 && Coords[i, 1] < 0)
+                    {
+                        x = Coords[i, 0];
+                        y = Coords[i, 1];
+                        chart1.Series[2].Points.AddXY(x, y);
+                    }
+                }
+            }
+
+        }
+        */
         public void CreateSerie(int NumSerie)
         {
          double x, y;
